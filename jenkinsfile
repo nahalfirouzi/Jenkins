@@ -1,24 +1,35 @@
 pipeline {
     agent any
-
     stages {
-        stage('Build') {
+        stage("Build") {
             steps {
-                echo 'Building...'
+                echo "Building ..."
+            }
+            post {
+                always {
+                    mail to: "nahalfirouzi@gmail.com",
+                         subject: "Build Status Email",
+                         body: "Build log attached!"
+                }
             }
         }
-    }
 
-    post {
-        success {
-            mail to: 'nahalfirouzi@gmail.com',
-                 subject: 'Build Status: SUCCESS',
-                 body: 'Build was successful!'
+        stage("Test") {
+            steps {
+                echo "Testing ..."
+            }
         }
-        failure {
-            mail to: 'nahalfirouzi@gmail.com',
-                 subject: 'Build Status: FAILED',
-                 body: 'Build failed. Check console output in Jenkins.'
+
+        stage("Deploy") {
+            steps {
+                echo "Deploying ..."
+            }
+        }
+
+        stage("Complete") {
+            steps {
+                echo "Completed."
+            }
         }
     }
 }
